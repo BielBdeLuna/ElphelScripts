@@ -1,0 +1,3 @@
+ACscript and ACstart are bash files that perform a copy of a batch of files in a folder to another folder while comparing if the second folder already contain any of the files in order to skip those file copying.
+
+ACscript.py is an old translation of that process to python

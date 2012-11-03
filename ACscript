@@ -1,0 +1,105 @@
+#!/bin/bash
+
+#################################################################################
+#										#
+#	..::Automated Copying Script::..					#
+#	This script copies all elements automatically, that don't exist		#
+#	yet in the destine directory, from an specified origin directory	#
+#	to this destine directory.						#
+#										#
+#	* The script is GPLv3 *							#
+#										#
+#	* It was originally written by Biel Bestué de Luna *			#
+#										#
+#	* Whith some ideas by Flavio Soares *					#
+#										#
+################################################################################# 
+
+compareDirectories() {
+
+	declare -a DirO
+	declare -a DirD
+	declare -a DocO
+	declare -a DocD
+	declare iO
+	declare oO
+	declare iD
+	declare oD
+	
+	iO=0
+	oO=0
+	for o in `ls $1`; do
+		if [ -d $1/$o ]; then
+			DirO[$iO]=$o
+			((++iO))
+		else
+			DocO[$oO]=$o
+			((++oO))
+		fi
+	done
+	
+
+	iD=0
+	oD=0
+	for d in `ls $2`; do
+		if [ -d $2/$d ]; then
+			DirD[$iD]=$d
+			((++iD))
+		else
+			DocD[$oD]=$d
+			((++oD))
+		fi
+	done
+
+	
+##-- a special case scenario where destine is completely empty --##
+
+	if [ $oO -gt 0 ] && [ $iO -gt 0 ] && [ $oD -eq 0 ] && [ $iD -eq 0 ]; then
+		echo "yeah man! that is an 'awsum' if!"
+		cp -r $1/* $2
+	else
+
+
+##-- first start with documents inside the directory --##
+
+		##if [oO -ne oD ]; then
+			for o in ${DocO[@]}; do
+				#only true if there are files in the origin array,
+				#if not, don't do anything.
+				for d in ${DocD[@]}; do
+					if [ $o == $d ]; then
+						continue 2
+					fi
+				done
+				#since documents don't contain other documents inside, 
+				#don't use recursivity	
+				echo "copying document: $o"			
+				cp $1/$o $2
+			done
+		##fi
+		
+		echo "no more files to compare at $2"
+
+
+##-- start with other directories inside the directory with recursivity --##
+
+		for o in ${DirO[@]}; do 
+			#only true if there are directories in the origin array,
+			#if not, don't do anything.
+			for d in ${DirD[@]}; do
+				if [ $o == $d ]; then
+					echo "starting with directory: $o"
+					compareDirectories $1/$o $2/$d
+					continue 2 # continue the org loop
+				fi	
+			done
+			#the destine folder doesn't exist, so copy all
+			#recursively without further complications
+			echo "copying recursivelly directory: $o"
+			cp -r $1/$o $2
+		done 				
+	
+		echo "no more directories to compare at $2"
+	fi
+}
+compareDirectories $1 $2

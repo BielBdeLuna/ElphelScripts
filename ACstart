@@ -1,0 +1,37 @@
+#!/bin/bash
+
+#################################################################################
+#										#
+#	..::Automated Copying Script Starter::..				#
+#	This script determines the origin and the destine directories		#
+#	for the automation							#
+#										#
+#	* The script is GPLv3 *							#
+#										#
+#	* It was originally written by Biel Bestué de Luna *			#
+#										#
+################################################################################# 
+
+readProjectInfo() {
+
+	#determine org and dest from known static paths to two xml documents,
+	#one in the origin HDD and the other in the destine computer, all this
+	#using a project system 
+	
+
+	#projectfolderOrg=tal
+	#org=$projectFolderOrg/video/
+	#ProjectFolderDest=tal
+	#dest=$ProjectFolderDest/video/
+	#searchformat()
+	#format=searchformat()
+
+	org="/home/biel/Escriptori/testing/org" #hack
+	dest="/home/biel/Escriptori/testing/dest" #hack
+	format="*.mov" #hack
+
+}
+
+readProjectInfo
+./ACscript $org $dest #$format
+
